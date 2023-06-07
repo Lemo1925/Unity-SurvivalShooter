@@ -2,7 +2,8 @@
 ![image](https://github.com/Lemo1925/Unity-SurvivalShooter/assets/76551325/18c6d2c8-8d1d-4e8d-b9c9-1f9041484f19)
 
 # 实现功能
-1.角色移动\n
+1.角色移动
+
 2.角色射击
 3.怪物AI
 4.怪物警戒
