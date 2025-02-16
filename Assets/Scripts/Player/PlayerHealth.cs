@@ -35,11 +35,12 @@ public class PlayerHealth : MonoBehaviour
         m_ImgTransition = m_BloodParent.transform.Find("Blood_Transition").GetComponent<Image>();
         m_Health = maxHealth;
         m_PlayerManager = GetComponent<PlayerManager>();
-        m_DamageUI = GameObject.Find("Canvas").transform.Find("DamageUI").gameObject;
+        m_DamageUI = m_BloodParent.transform.Find("DamageUI").gameObject;
     }
     public void Damage(float damage)
     {
         if (m_PlayerManager.state == PlayerState.Death) return;
+        m_PlayerManager.voice.GetHurt();
         m_Health -= damage;
         ShowDamageUI();
         Invoke(nameof(HideDamageUI),0.1f);

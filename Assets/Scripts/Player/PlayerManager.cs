@@ -9,13 +9,9 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector] public PlayerAnimator animator;
     [HideInInspector] public PlayerAttack attack;
     [HideInInspector] public PlayerHealth health;
-    public static int Score = 0;
-    public GameObject scorePanel;
+    [HideInInspector] public PlayerVoice voice;
     public float horizontal, vertical;
-    private void Awake()
-    {
-        scorePanel = GameObject.Find($"Canvas").transform.Find($"ScorePanel").gameObject;
-    }
+
     // Start is called before the first frame update
     void Start() { InitPlayer(); }
     //初始化
@@ -25,13 +21,13 @@ public class PlayerManager : MonoBehaviour
         this.state = state;
         if (state == PlayerState.Death)
         {
-            scorePanel.SetActive(true);
-            scorePanel.transform.Find($"Score").gameObject.
-                GetComponent<Text>().text = Score.ToString();
+            voice.GetDeath();
             movement.enabled = false;
             animator.enabled = false;
             attack.enabled = false;
             health.enabled = false;
+            voice.enabled = false;
+            GameManager.Instance.GameOver(GameState.Fail);
         }
     }
     void AddAllPlayerScript()
@@ -40,6 +36,7 @@ public class PlayerManager : MonoBehaviour
         animator = AddScript<PlayerAnimator>();
         attack = AddScript<PlayerAttack>();
         health = AddScript<PlayerHealth>();
+        voice = AddScript<PlayerVoice>();
     }
     T AddScript<T>() where T : MonoBehaviour
     {

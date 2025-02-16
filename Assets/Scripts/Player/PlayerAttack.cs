@@ -1,6 +1,7 @@
 using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
+    private PlayerManager m_PlayerManager;
     private Transform m_BulletPoint;
     private float timeBetweenShoot = 0.15f;
     private float m_Timer;
@@ -9,6 +10,7 @@ public class PlayerAttack : MonoBehaviour
     private float attackPower = 20f;
     void Start()
     {
+        m_PlayerManager = GetComponent<PlayerManager>();
         m_BulletPoint = transform.Find($"GunBarrelEnd");
         m_Timer = timeBetweenShoot;
     }
@@ -19,9 +21,12 @@ public class PlayerAttack : MonoBehaviour
     void Shooting()
     {
         if (m_Timer < timeBetweenShoot) m_Timer += Time.deltaTime;
-        if (Input.GetMouseButtonDown(0) && m_Timer >= timeBetweenShoot)
+        if (Input.GetMouseButtonDown(0) && m_Timer >= timeBetweenShoot && !GameTimer.isPaused)
         {
-            m_Timer = 0; GenerateBullet();
+            m_Timer = 0;
+            m_PlayerManager.voice.Shoot();
+            CameraController.Instance.TriggerShake();
+            GenerateBullet();
         }
     }
     private void GenerateBullet()
@@ -58,7 +63,7 @@ public class PlayerAttack : MonoBehaviour
         Bullet myBullet = bullet.GetComponent<Bullet>();
         if (myBullet == null) myBullet = bullet.AddComponent<Bullet>();
         myBullet.enabled = true;
-        myBullet.bulletPower = attackPower;
+        myBullet.bulletPower = attackPower * Mathf.Min((1.0f + GameManager.Instance.playerKillNum / 100),1.5f);
         return bullet;
     }
 }

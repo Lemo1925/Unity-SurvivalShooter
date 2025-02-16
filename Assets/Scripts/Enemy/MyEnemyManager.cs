@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public enum EnemyState { Patrol, Stay, Death, Trace, Back, Attack, Wake }
+
 public class MyEnemyManager : MonoBehaviour
 {
     public EnemyState enemyState = EnemyState.Patrol;
@@ -9,6 +10,8 @@ public class MyEnemyManager : MonoBehaviour
     public EnemyAI enemyAI;
     public EnemyAnimator enemyAnimator;
     public EnemyHealth enemyHealth;
+    public EnemyType enemyType;
+    public EnemyVoice enemyVoice;
     void Start()
     {
         InitEnemyManager();
@@ -23,12 +26,12 @@ public class MyEnemyManager : MonoBehaviour
         OpenAnimatorToggle();
         if (state == EnemyState.Death)
         {
-            PlayerManager.Score+=10;
-            Debug.Log(PlayerManager.Score);
+            enemyVoice.DeathVoice();
+            GameManager.Instance.playerKillNum++;
             enemyAI.enabled = false;
             enemyHealth.enabled = false;
+            enemyVoice.enabled = false;
             StartCoroutine(Destroy());
-            MyEnemyGeneratorController.AddMaxEnemy();
         }
     }
     void AddAllPlayerScript()
@@ -36,6 +39,7 @@ public class MyEnemyManager : MonoBehaviour
         enemyAI = AddScript<EnemyAI>();
         enemyAnimator = AddScript<EnemyAnimator>();
         enemyHealth = AddScript<EnemyHealth>();
+        enemyVoice = AddScript<EnemyVoice>();
     }
 
     T AddScript<T>() where T : MonoBehaviour

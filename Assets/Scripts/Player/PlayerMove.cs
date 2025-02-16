@@ -3,7 +3,7 @@ public class PlayerMove : MonoBehaviour
 {
     public PlayerManager playerManager;
     public Rigidbody rigid;
-    public float speed = 10f;
+    public float speed = 6f;
     public Vector3 moveDir;
     // Start is called before the first frame update
     void Start()

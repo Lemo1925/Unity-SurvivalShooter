@@ -9,7 +9,7 @@ public class EnemyHealth : MonoBehaviour
     private readonly Vector3 m_Offset = new Vector3(0, 60, 0);
     private bool m_IsUpdateBlood = false;
     private float bloodUpdateSpeed = 1f;
-    private readonly float m_MaxHealth = MyEnemyGeneratorController.MaxCount * 10;
+    private readonly float m_MaxHealth = 100f;
     private float m_Health;
     private Material m_Material;
     private Color m_MaterialColor;
@@ -46,13 +46,16 @@ public class EnemyHealth : MonoBehaviour
     }
     private void InitEnemyHealth()
     {
-        m_Health = m_MaxHealth;
+        m_IsUpdateBlood = true;
+        m_Health = m_MaxHealth * GetExtraProp();
         m_EnemyManager = GetComponent<MyEnemyManager>();
     }
     public void Damage(float value)
     {
         if (m_EnemyManager.enemyState == EnemyState.Death) return;
         m_Health -= value;
+        m_EnemyManager.enemyVoice.HurtVoice();
+        m_EnemyManager.SetEnemyState(EnemyState.Wake);
         m_IsUpdateBlood = true;
         OpenDamageEffect();
         if (m_Health <= 0) m_EnemyManager.SetEnemyState(EnemyState.Death);
@@ -77,15 +80,33 @@ public class EnemyHealth : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         m_Material.SetColor($"_RimColor",m_MaterialColor);
     }
-    void OpenDamageEffect()
-    {
-        StartCoroutine(nameof(DamageEffect));
-    }
+    void OpenDamageEffect() => StartCoroutine(nameof(DamageEffect));
     void BehaviorAfterDeath()
     {
         UpdateEnemyBlood();
-        if (m_IsUpdateBlood) return;
         GameObjectPool.Instance.RecycleObj(m_Blood);
+        if (m_IsUpdateBlood) return;
         m_MyBehavior.Finish();
+    }
+
+    private float GetExtraProp()
+    {
+        var stage = GameManager.Instance.GetStage();
+        var extraProp = 1.0f;
+        switch (stage)
+        {
+            case 1:
+                extraProp = 1.2f;
+                break;
+            case 2:
+                extraProp = 1.5f;
+                break;
+            case 3:
+                extraProp = 2.0f;
+                break;
+            default:
+                break;
+        }
+        return extraProp;
     }
 }

@@ -29,8 +29,8 @@ public class EnemyAI : MonoBehaviour
     private float attackDistance = 1.5f;
     private Transform m_ChaseTarget;
     private Vector3 m_PatrolCenterPoint = Vector3.zero;
-    private float chaseSpeed = 10f;  //5f->10f
-    private float chaseAcceleration = 24f; //16f->24f
+    private float chaseSpeed = 10f;
+    private float chaseAcceleration = 24f;  // 增加
     #endregion
     #region 返回状态时的变量
     private Vector3 m_ChaseBeforePoint;
@@ -40,7 +40,7 @@ public class EnemyAI : MonoBehaviour
     private float m_BufferTime;
     private float attackBetweenTime = 2f;
     private float m_AttackTimer;
-    public float attackPower = MyEnemyGeneratorController.MaxCount > 90 ? 90 : MyEnemyGeneratorController.MaxCount;
+    public float attackPower = 30f;
     #endregion
     #region 惊觉状态时的变量
     private float startledTime = 0.5f;
@@ -49,17 +49,13 @@ public class EnemyAI : MonoBehaviour
     private Transform m_Canvas;
     private Vector3 startledOffset = new Vector3(0, 70, 0);
     #endregion
-    void Start()
-    {
-        InitEnemyAI();
-    }
-    void Update()
-    {
-        EnemyBehaviorByState();
-    }
+    void Start() => InitEnemyAI();
+    void Update() => EnemyBehaviorByState();
     private void OnDisable()
     {
         Stopping();
+        if (m_StartledEffect != null)
+            GameObjectPool.Instance.RecycleObj(m_StartledEffect);
     }
     private void InitEnemyAI()
     {
@@ -75,7 +71,7 @@ public class EnemyAI : MonoBehaviour
         m_PatrolCenterPoint /= m_EnemyManager.patrolPlaces.Count;
         m_AttackTimer = attackBetweenTime;
         if (m_EnemyManager.enemyState == EnemyState.Trace)
-            SetNavSpeed(chaseSpeed,chaseAcceleration);
+            SetNavSpeed(chaseSpeed * GetExtraProp(),chaseAcceleration * GetExtraProp());
         else if (m_EnemyManager.enemyState == EnemyState.Patrol ||
                  m_EnemyManager.enemyState == EnemyState.Back )
             SetNavSpeed(patrolSpeed,patrol_Acceleration);
@@ -111,7 +107,8 @@ public class EnemyAI : MonoBehaviour
     }
     private void Patrol()
     {
-        if (Alert())
+        var stage = GameManager.Instance.GetStage();
+        if (Alert()|| stage >= 3)
         {
             m_EnemyManager.SetEnemyState(EnemyState.Wake);
             return;
@@ -155,17 +152,17 @@ public class EnemyAI : MonoBehaviour
     bool CreateRay(Vector3 direction)
     {
         Ray ray = new Ray(transform.position, direction);
-        if (Physics.Raycast(ray,out var hitInfo, alertDistance))
+        if (Physics.Raycast(ray,out var hitInfo, alertDistance * GetExtraProp()))
         {
             Debug.DrawLine(transform.position,hitInfo.point,Color.red);
             if (!hitInfo.collider.CompareTag($"Player")) return false;
             m_ChaseTarget = hitInfo.collider.transform;
             m_ChaseBeforePoint = transform.position;
-            SetNavSpeed(chaseSpeed,chaseAcceleration);
+            SetNavSpeed(chaseSpeed * GetExtraProp(),chaseAcceleration * GetExtraProp());
             StartCoroutine(GenStartledEffect());
             return true;
         }
-        Debug.DrawRay(transform.position, direction*alertDistance,Color.red);
+        Debug.DrawRay(transform.position, direction * alertDistance * GetExtraProp(), Color.red);
         return false;
     }
    
@@ -178,11 +175,11 @@ public class EnemyAI : MonoBehaviour
             SetNavSpeed(patrolSpeed,patrol_Acceleration);
             return;
         }
-        if (Vector3.Distance(transform.position,m_PatrolCenterPoint)> chaseDistance)
+        if (Vector3.Distance(transform.position, m_PatrolCenterPoint) > chaseDistance * GetExtraProp())
         {
             Stopping();
             m_EnemyManager.SetEnemyState(EnemyState.Back);
-            SetNavSpeed(patrolSpeed,patrol_Acceleration);
+            SetNavSpeed(patrolSpeed, patrol_Acceleration);
             return;
         }
         if (Vector3.Distance(transform.position, m_ChaseTarget.position)<= attackDistance)
@@ -221,7 +218,8 @@ public class EnemyAI : MonoBehaviour
         if (m_BufferTime < attackBufferTime) return;
         if (m_AttackTimer >= attackBetweenTime)
         {
-            m_ChaseTarget.GetComponent<PlayerHealth>().Damage(attackPower);
+            var extraRate = GameManager.Instance.playerKillNum > 0 ? GameManager.Instance.playerKillNum : 1;
+            m_ChaseTarget.GetComponent<PlayerHealth>().Damage(attackPower * extraRate * 0.6f);
             m_AttackTimer = 0;
             m_BufferTime = 0;
         }
@@ -233,8 +231,15 @@ public class EnemyAI : MonoBehaviour
     }
     void Startled()
     {
-        // ReSharper disable once PossibleNullReferenceException
         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+        if (m_StartledEffect == null)
+        {
+            if (m_ChaseTarget == null) 
+            {
+                m_ChaseTarget = GameObject.FindGameObjectWithTag("Player").transform;
+            }
+            StartCoroutine(GenStartledEffect());
+        }
         m_StartledEffect.transform.position = screenPos + startledOffset;
         m_StartledTimer += Time.deltaTime;
         if (m_StartledTimer >= startledTime)
@@ -256,5 +261,26 @@ public class EnemyAI : MonoBehaviour
     {
         yield return new WaitForSeconds(0.05f);
         GameObjectPool.Instance.RecycleObj(m_StartledEffect);
+    }
+
+    private float GetExtraProp()
+    {
+        var stage = GameManager.Instance.GetStage();
+        var extraProp = 1.0f;
+        switch (stage)
+        {
+            case 1:
+                extraProp = 1.2f;
+                break;
+            case 2:
+                extraProp = 1.5f;
+                break;
+            case 3:
+                extraProp = 2.0f;
+                break;
+            default:
+                break;
+        }
+        return extraProp;
     }
 }

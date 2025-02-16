@@ -33,12 +33,11 @@ public class GameObjectPool : MonoBehaviour
         if (m_ObjectDic[objName].Count == 1)
         {
             Transform objRoot = transform.Find(objName);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 30; i++)
             {
                 GameObject obj = Instantiate(m_ObjectDic[objName][0],gameObject.transform);
                 obj.name = objName;
                 obj.SetActive(false);
-                // ReSharper disable once Unity.InstantiateWithoutParent
                 obj.transform.SetParent(objRoot);
                 m_ObjectDic[objName].Add(obj);
             }
