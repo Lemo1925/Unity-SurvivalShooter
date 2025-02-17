@@ -252,10 +252,11 @@ public class EnemyAI : MonoBehaviour
     IEnumerator GenStartledEffect()
     {
         Stopping();
-        m_StartledEffect = GameObjectPool.Instance.GetObj($"StartledEffect");
+        m_StartledEffect = GameObjectPool.Instance.GetObj($"StartledEffect", true);
         yield return new WaitForSeconds(0.03f);
         m_StartledEffect.transform.SetParent(m_Canvas);
         m_StartledEffect.transform.localScale = Vector3.one;
+        m_StartledEffect.SetActive(true);
     }
     IEnumerator RecycleStartled()
     {

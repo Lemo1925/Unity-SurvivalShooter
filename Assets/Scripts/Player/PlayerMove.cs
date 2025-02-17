@@ -21,7 +21,7 @@ public class PlayerMove : MonoBehaviour
         playerManager.horizontal = Input.GetAxis("Horizontal");
         playerManager.vertical = Input.GetAxis("Vertical");
         moveDir.Set(playerManager.horizontal,0,playerManager.vertical);
-        rigid.MovePosition(transform.position + moveDir.normalized * speed * Time.fixedDeltaTime);
+        rigid.MovePosition(transform.position + speed * Time.fixedDeltaTime * moveDir.normalized);
     }
     void Turn()
     {
