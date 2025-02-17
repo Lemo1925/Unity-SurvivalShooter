@@ -15,7 +15,7 @@ public class MainUiPanel : MonoBehaviour
         StartBtn.GetComponent<Button>().onClick.AddListener(() => SceneConfig.LoadGameScene());
         SettingBtn.GetComponent<Button>().onClick.AddListener(OnSettingBtnClick);
         ExitBtn.GetComponent<Button>().onClick.AddListener(()=>Application.Quit());
-        print(GameConfig.config);
+
         m_AudioSource.volume = GameConfig.config.MusicVolume;
     }
 

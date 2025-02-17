@@ -15,7 +15,26 @@ public class GameTimer : MonoBehaviour
         InvokeRepeating(nameof(CountDownTimer), 0, 1.0f);
     }
 
-    private void Update() => m_TimeTextComp.text = $"Weak Up: {GetTimer()}";
+    private void Update()
+    {
+        var stage = GameManager.Instance.GetStage();
+        switch (stage)
+        {
+            case 0:
+                m_TimeTextComp.color = Color.white;
+                break;
+            case 1:
+                m_TimeTextComp.color = Color.yellow;
+                break;
+            case 2:
+                m_TimeTextComp.color = new Color(1f, 0.647f, 0f, 1f);
+                break;
+            case 3:
+                m_TimeTextComp.color = Color.red;
+                break;
+        }
+        m_TimeTextComp.text = $"Wake Up: {GetTimer()}";
+    }
 
     private void CountDownTimer()
     {

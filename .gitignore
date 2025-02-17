@@ -77,3 +77,8 @@ crashlytics-build.properties
 # Save File
 /[Aa]ssets/[Cc]onfig.json.meta
 /[Aa]ssets/[Cc]onfig.json
+
+# Build Path
+[Rr]elease/
+
+*.zip

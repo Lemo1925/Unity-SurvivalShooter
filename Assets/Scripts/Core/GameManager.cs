@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private static string GameTutorials = "\r\nMove: W、A、S、D\r\nShoot: Left Mouse Button\r\n\r\nLive Until Wake Up";
+
     public int playerKillNum;
     public GameTimer GameTimer;
     private void Start() => InitGame();
@@ -22,7 +24,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            ScorePanel.Instance.ShowPanel("Game Pause", true);
+            ScorePanel.Instance.ShowPanel(GameTutorials, true);
         }
     }
     void InitGame()
@@ -48,7 +50,7 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case GameState.Win:
-                ScorePanel.Instance.ShowPanel("Weak Up", false);
+                ScorePanel.Instance.ShowPanel("Wake Up", false);
                 break;
             case GameState.Fail:
                 ScorePanel.Instance.ShowPanel("Fail", false);

@@ -3,8 +3,9 @@ using System.IO;
 using UnityEngine;
 public class GameObjectPool : MonoBehaviour
 {
-    private Dictionary<string, List<GameObject>> m_ObjectDic = new Dictionary<string, List<GameObject>>();
+    private Dictionary<string, Queue<GameObject>> m_ObjectDic = new Dictionary<string, Queue<GameObject>>();
     private static GameObjectPool _instance;
+    private const int Capacity = 18;
     public static GameObjectPool Instance
     {
         get
@@ -19,38 +20,40 @@ public class GameObjectPool : MonoBehaviour
         string objName = Path.GetFileName(objPath);
         if (!m_ObjectDic.ContainsKey(objName))
         {
-            m_ObjectDic.Add(objName,new List<GameObject>());
+            m_ObjectDic.Add(objName,new Queue<GameObject>(Capacity));
             var objRoot = new GameObject(objName);
             objRoot.transform.SetParent(transform);
             GameObject objPre = Resources.Load<GameObject>(objPath);
-            m_ObjectDic[objName].Add(objPre);
+            var obj = Instantiate(objPre);
+            obj.SetActive(false);
+            m_ObjectDic[objName].Enqueue(obj);
         }
     }
-    public GameObject GetObj(string objPath)
+    public GameObject GetObj(string objPath, bool hide = false)
     {
         CreateObjPool(objPath);
         string objName = Path.GetFileName(objPath);
         if (m_ObjectDic[objName].Count == 1)
         {
             Transform objRoot = transform.Find(objName);
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < Capacity; i++)
             {
-                GameObject obj = Instantiate(m_ObjectDic[objName][0],gameObject.transform);
+                GameObject obj = Instantiate(m_ObjectDic[objName].Peek(), base.gameObject.transform);
                 obj.name = objName;
                 obj.SetActive(false);
                 obj.transform.SetParent(objRoot);
-                m_ObjectDic[objName].Add(obj);
+                m_ObjectDic[objName].Enqueue(obj);
             }
         }
-        GameObject secondObj = m_ObjectDic[objName][1];
-        secondObj.SetActive(true);
-        m_ObjectDic[objName].RemoveAt(1);
-        return secondObj;
+        GameObject gameObject = m_ObjectDic[objName].Dequeue();
+        gameObject.SetActive(!hide);
+        return gameObject;
     }
     public void RecycleObj(GameObject obj)
     {
-        if (!m_ObjectDic.ContainsKey(obj.name)) return;
+        var key = obj.name.Replace("(Clone)", "");
+        if (!m_ObjectDic.ContainsKey(key)) return;
         obj.SetActive(false);
-        m_ObjectDic[obj.name].Add(obj);
+        m_ObjectDic[key].Enqueue(obj);
     }
 }

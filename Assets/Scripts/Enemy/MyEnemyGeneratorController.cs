@@ -16,7 +16,7 @@ public class MyEnemyGeneratorController : MonoBehaviour
    private Dictionary<Transform, List<Transform>> m_PatrolsDic;
    public GameObject[] enemyPre;
    private List<GameObject> m_CurrentEnemy;
-   public int MaxCount = 5; // 随时间增加 3 -> 7 1.2  5 -> 10 1.5 8 -> 15 2.0  5,7,10,15
+   public int MaxCount = 5; 
    public int enemyIndex;
    void Start()
     {   

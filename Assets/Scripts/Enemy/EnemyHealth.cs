@@ -33,7 +33,7 @@ public class EnemyHealth : MonoBehaviour
     }
     private void InitEnemyBlood()
     {
-        m_Blood = GameObjectPool.Instance.GetObj("EnemyBlood");
+        m_Blood = GameObjectPool.Instance.GetObj("EnemyBlood", true);
         m_ImgBlood = m_Blood.transform.Find("Blood").GetComponent<Image>();
         m_Canvas = GameObject.Find("Canvas");
         m_Blood.transform.SetParent(m_Canvas.transform);
@@ -43,6 +43,7 @@ public class EnemyHealth : MonoBehaviour
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
         m_Blood.transform.position = screenPos + m_Offset;
+        m_Blood.SetActive(true);
     }
     private void InitEnemyHealth()
     {
