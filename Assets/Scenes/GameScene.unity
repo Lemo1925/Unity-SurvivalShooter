@@ -1859,56 +1859,43 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 654388069, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 654388069, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1138809013, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1138809013, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1138809013, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1256461487, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1256461487, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1710720617, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1710720617, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1710720617, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831312295960697217, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
-      propertyPath: m_Text
-      value: "\nMove: W\u3001A\u3001S\u3001D\nShoot: Mouse Button Left\n\nLive Until
-        Wake Up"
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831312295960697218, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 230.6879
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831312295960697218, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 159.3789
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8831312297277236069, guid: 747513391e9439b4fb41cf8ab0041f8b, type: 3}
       propertyPath: m_Pivot.x
