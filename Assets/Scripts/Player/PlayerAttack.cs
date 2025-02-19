@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 public class PlayerAttack : MonoBehaviour
 {
     private PlayerManager m_PlayerManager;
@@ -8,16 +9,26 @@ public class PlayerAttack : MonoBehaviour
     private int bulletsNum = 10;
     private int angleBullet = 10;
     private float attackPower = 20f;
+    private Text atkInfoText;
     void Start()
     {
+        atkInfoText = GameObject.Find("Canvas/WeaponInfo").GetComponent<Text>();
         m_PlayerManager = GetComponent<PlayerManager>();
         m_BulletPoint = transform.Find($"GunBarrelEnd");
         m_Timer = timeBetweenShoot;
     }
     void Update()
     {
+        UpdateAtk();
         Shooting();
     }
+
+    private void UpdateAtk()
+    {
+        print(Mathf.Min(1.0f + GameManager.Instance.GetPlayerKillNum() / 100.0f, 1.5f));
+        atkInfoText.text = $"Weapon Attack£º{(float)(attackPower * Mathf.Min(1.0f + GameManager.Instance.GetPlayerKillNum() / 100.0f, 1.5f))}";
+    }
+
     void Shooting()
     {
         if (m_Timer < timeBetweenShoot) m_Timer += Time.deltaTime;
@@ -63,7 +74,7 @@ public class PlayerAttack : MonoBehaviour
         Bullet myBullet = bullet.GetComponent<Bullet>();
         if (myBullet == null) myBullet = bullet.AddComponent<Bullet>();
         myBullet.enabled = true;
-        myBullet.bulletPower = attackPower * Mathf.Min((1.0f + GameManager.Instance.playerKillNum / 100),1.5f);
+        myBullet.bulletPower = attackPower * Mathf.Min(1.0f + GameManager.Instance.GetPlayerKillNum() / 100.0f,1.5f);
         return bullet;
     }
 }

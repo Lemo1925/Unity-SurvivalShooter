@@ -27,7 +27,7 @@ public class MyEnemyManager : MonoBehaviour
         if (state == EnemyState.Death)
         {
             enemyVoice.DeathVoice();
-            GameManager.Instance.playerKillNum++;
+            GameManager.Instance.AddPlayerKillNum();
             enemyAI.enabled = false;
             enemyHealth.enabled = false;
             enemyVoice.enabled = false;

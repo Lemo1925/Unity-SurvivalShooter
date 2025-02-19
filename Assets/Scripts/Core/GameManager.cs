@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     private static string GameTutorials = "\r\nMove: W、A、S、D\r\nShoot: Left Mouse Button\r\n\r\nLive Until Wake Up";
 
-    public int playerKillNum;
+    private int playerKillNum;
     public GameTimer GameTimer;
     private void Start() => InitGame();
     private void Update()
@@ -58,19 +58,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public int GetPlayerKillNum() => playerKillNum;
+
+    public void AddPlayerKillNum() => playerKillNum++;
     public int GetStage()
     {
         var timeLeft = GameTimer.GameMinutes();
         var stage = 0;
-        if ((timeLeft <= 7 && timeLeft > 5) || playerKillNum >= 10)
+        if (timeLeft < 4 && timeLeft >= 3)
         {
             stage = 1;
         }
-        else if ((timeLeft <= 5 && timeLeft > 2) || playerKillNum >= 30)
+        else if (timeLeft < 3 && timeLeft >= 1)
         {
             stage = 2;        
         }
-        else if ((timeLeft <= 2)|| playerKillNum > 50)
+        else if (timeLeft < 1)
         {
             stage = 3;
         }

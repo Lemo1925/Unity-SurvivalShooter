@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class GameTimer : MonoBehaviour
 {
-    private const float m_TotalTime = 10 * 60f;
+    private const float m_TotalTime = 5 * 60f;
     public static bool isPaused = false;
     private float m_ElapsedTime;
     private Text m_TimeTextComp;
@@ -42,7 +42,7 @@ public class GameTimer : MonoBehaviour
         {
             m_ElapsedTime--;
         }
-        else if (m_ElapsedTime < 0)
+        else if (m_ElapsedTime <= 0)
         {
             CancelInvoke(nameof(CountDownTimer));
             GameManager.Instance.GameOver(GameState.Win);
@@ -60,7 +60,6 @@ public class GameTimer : MonoBehaviour
         Time.timeScale = 1.0f;
         isPaused = false;
     }
-
     public int GameMinutes() => (int)((m_ElapsedTime % 3600) / 60);
     public string GetTimer()
     {

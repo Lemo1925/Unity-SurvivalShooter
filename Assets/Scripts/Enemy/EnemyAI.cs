@@ -218,8 +218,7 @@ public class EnemyAI : MonoBehaviour
         if (m_BufferTime < attackBufferTime) return;
         if (m_AttackTimer >= attackBetweenTime)
         {
-            var extraRate = GameManager.Instance.playerKillNum > 0 ? GameManager.Instance.playerKillNum : 1;
-            m_ChaseTarget.GetComponent<PlayerHealth>().Damage(attackPower * extraRate * 0.6f);
+            m_ChaseTarget.GetComponent<PlayerHealth>().Damage(attackPower * GetExtraProp());
             m_AttackTimer = 0;
             m_BufferTime = 0;
         }
